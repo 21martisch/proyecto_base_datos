@@ -87,6 +87,37 @@ CREATE TABLE detalle_ventas (
     FOREIGN KEY (venta_id) REFERENCES ventas (venta_id),
     FOREIGN KEY (producto_id) REFERENCES productos (producto_id)
 );
+-- Tabla de hechos para análisis de ventas y reservas
+CREATE TABLE hechos_transacciones (
+    hecho_id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT NOT NULL,
+    tipo_transaccion ENUM('reserva', 'venta') NOT NULL,
+    transaccion_id INT NOT NULL,
+    fecha DATETIME NOT NULL,
+    monto DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(cliente_id)
+);
 
+	-- Tabla transaccionales 
 
+CREATE TABLE transacciones_reservas (
+    transaccion_id INT AUTO_INCREMENT PRIMARY KEY,
+    reserva_id INT NOT NULL,
+    cliente_id INT NOT NULL,
+    cancha_id INT NOT NULL,
+    estado_reserva ENUM('pendiente', 'confirmada', 'cancelada') NOT NULL,
+    FOREIGN KEY (reserva_id) REFERENCES reservas(reserva_id),
+    FOREIGN KEY (cliente_id) REFERENCES clientes(cliente_id),
+    FOREIGN KEY (cancha_id) REFERENCES canchas(cancha_id)
+);
+CREATE TABLE transacciones_ventas (
+    transaccion_id INT AUTO_INCREMENT PRIMARY KEY,
+    venta_id INT NOT NULL,
+    producto_id INT NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10,2) NOT NULL,
+    subtotal DECIMAL(10,2) GENERATED ALWAYS AS (cantidad * precio_unitario) STORED,
+    FOREIGN KEY (venta_id) REFERENCES ventas(venta_id),
+    FOREIGN KEY (producto_id) REFERENCES productos(producto_id)
+);
 

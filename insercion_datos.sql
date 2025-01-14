@@ -47,4 +47,28 @@ INSERT INTO pagos (reserva_id, monto, fecha_pago, metodo_pago)
 VALUES
 (1, 5000.00, NOW(), 'Efectivo');
 
-select * from pagos
+select * from pagos;
+-- Insertar una reserva en la tabla de hechos
+INSERT INTO hechos_transacciones (cliente_id, tipo_transaccion, transaccion_id, fecha, monto)
+SELECT cliente_id, 'reserva', reserva_id, fecha_hora, 5000.00
+FROM reservas
+WHERE reserva_id = 1;
+
+INSERT INTO hechos_transacciones (cliente_id, tipo_transaccion, transaccion_id, fecha, monto)
+SELECT cliente_id, 'reserva', reserva_id, fecha_hora, 5000.00
+FROM reservas
+WHERE reserva_id = 2;
+select * from hechos_transacciones;
+-- Insertar una venta en la tabla de hechos
+INSERT INTO hechos_transacciones (cliente_id, tipo_transaccion, transaccion_id, fecha, monto)
+SELECT cliente_id, 'venta', venta_id, fecha_venta, total_venta
+FROM ventas
+WHERE venta_id = 1;
+-- Insertar datos en transacciones_reservas
+INSERT INTO transacciones_reservas (reserva_id, cliente_id, cancha_id, estado_reserva)
+VALUES (1, 1, 1, 'confirmada');
+select * from transacciones_reservas;
+-- Insertar datos en transacciones_ventas
+INSERT INTO transacciones_ventas (venta_id, producto_id, cantidad, precio_unitario)
+VALUES (1, 1, 1, 20000.00);
+select * from transacciones_ventas;
